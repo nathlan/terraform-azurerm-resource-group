@@ -10,11 +10,11 @@ variable "name" {
 
 variable "location" {
   type        = string
-  description = "The Azure region where the resource group will be created."
+  description = "The Azure region where the resource group will be created. Must be either australiaeast or australiacentral."
 
   validation {
-    condition     = can(regex("^[a-z]+$", var.location))
-    error_message = "Location must be a valid Azure region name (lowercase, no spaces)."
+    condition     = contains(["australiaeast", "australiacentral"], var.location)
+    error_message = "Location must be either 'australiaeast' or 'australiacentral'."
   }
 }
 

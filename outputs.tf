@@ -17,3 +17,8 @@ output "resource" {
   description = "The full resource group object from the Azure Verified Module."
   value       = module.resource_group.resource
 }
+
+output "naming_convention_output" {
+  description = "The naming convention output from Azure naming module."
+  value       = local.use_convention ? module.azname.resource_group : null
+}

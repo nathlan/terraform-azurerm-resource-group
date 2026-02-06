@@ -1,11 +1,30 @@
 variable "name" {
   type        = string
-  description = "The name of the resource group. Must be unique within the subscription."
+  description = "The name of the resource group. Leave null to use naming convention."
+  default     = null
 
   validation {
-    condition     = can(regex("^[a-zA-Z0-9-_().]{1,90}$", var.name))
+    condition     = var.name == null || can(regex("^[a-zA-Z0-9-_().]{1,90}$", var.name))
     error_message = "Resource group name must be 1-90 characters long and can only contain alphanumerics, hyphens, underscores, parentheses, and periods."
   }
+}
+
+variable "workload" {
+  type        = string
+  description = "The workload name for naming convention. When provided, triggers automatic naming."
+  default     = null
+}
+
+variable "env" {
+  type        = string
+  description = "The environment identifier for naming convention (e.g., 'dev', 'prod')."
+  default     = null
+}
+
+variable "team" {
+  type        = string
+  description = "The team identifier for naming convention."
+  default     = null
 }
 
 variable "location" {

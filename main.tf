@@ -1,15 +1,23 @@
-# Azure Resource Group Module
-# This module wraps the Azure Verified Module (AVM) for Resource Groups
-# with opinionated defaults and additional validation
+module "azname" {
+  source  = "Azure/naming/azurerm"
+  version = "~> 0.4.3"
+  suffix  = local.name_parts
+}
 
 module "resource_group" {
   source  = "Azure/avm-res-resources-resourcegroup/azurerm"
   version = "~> 0.2.2"
 
-  name             = var.name
+  name             = module.azname.resource_group.name
   location         = var.location
-  tags             = var.tags
+  tags             = local.all_tags
   lock             = var.lock
   role_assignments = var.role_assignments
   enable_telemetry = var.enable_telemetry
+}
+
+locals {
+  name_parts     = [for p in [var.workload, var.env, var.team] : p if p != null && p != ""]
+  name_part_tags = {for k, v in {"Workload" = var.workload, "Env" = var.env, "Team" = var.team} : k => v if v != null && v != ""}
+  all_tags       = merge(local.name_part_tags, var.tags)
 }

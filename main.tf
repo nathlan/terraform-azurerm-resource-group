@@ -17,7 +17,7 @@ module "resource_group" {
 }
 
 locals {
-  name_parts = [for p in [var.workload, var.env, var.team] : p if p != null && p != ""]
-  ctx_tags   = {for k, v in {"Workload" = var.workload, "Env" = var.env, "Team" = var.team} : k => v if v != null && v != ""}
-  all_tags   = merge(local.ctx_tags, var.tags)
+  name_parts     = [for p in [var.workload, var.env, var.team] : p if p != null && p != ""]
+  name_part_tags = {for k, v in {"Workload" = var.workload, "Env" = var.env, "Team" = var.team} : k => v if v != null && v != ""}
+  all_tags       = merge(local.name_part_tags, var.tags)
 }

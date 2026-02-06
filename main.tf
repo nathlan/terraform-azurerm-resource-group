@@ -8,7 +8,7 @@ module "resource_group" {
   source  = "Azure/avm-res-resources-resourcegroup/azurerm"
   version = "~> 0.2.2"
 
-  name             = local.rg_name
+  name             = module.azname.resource_group.name
   location         = var.location
   tags             = local.all_tags
   lock             = var.lock
@@ -17,9 +17,7 @@ module "resource_group" {
 }
 
 locals {
-  name_parts     = [for p in [var.workload, var.env, var.team] : p if p != null && p != ""]
-  use_convention = length(local.name_parts) > 0
-  rg_name        = local.use_convention ? module.azname.resource_group.name : var.name
-  ctx_tags       = { for k, v in { "Workload" = var.workload, "Env" = var.env, "Team" = var.team } : k => v if v != null && v != "" }
-  all_tags       = merge(local.ctx_tags, var.tags)
+  name_parts = [for p in [var.workload, var.env, var.team] : p if p != null && p != ""]
+  ctx_tags   = {for k, v in {"Workload" = var.workload, "Env" = var.env, "Team" = var.team} : k => v if v != null && v != ""}
+  all_tags   = merge(local.ctx_tags, var.tags)
 }

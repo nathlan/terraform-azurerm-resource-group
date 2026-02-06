@@ -1,17 +1,6 @@
-variable "name" {
-  type        = string
-  description = "The name of the resource group. Leave null to use naming convention."
-  default     = null
-
-  validation {
-    condition     = var.name == null || can(regex("^[a-zA-Z0-9-_().]{1,90}$", var.name))
-    error_message = "Resource group name must be 1-90 characters long and can only contain alphanumerics, hyphens, underscores, parentheses, and periods."
-  }
-}
-
 variable "workload" {
   type        = string
-  description = "The workload name for naming convention. When provided, triggers automatic naming."
+  description = "The workload name for naming convention."
   default     = null
 }
 
